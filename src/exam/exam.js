@@ -17,7 +17,7 @@ const useApiCall = () => {
 const useAutoSave = (answer, submmited) => {
   const [apiCall] = useApiCall();
   const save = (event) => {
-    apiCall(["post", "http://13.60.69.110:5000/updateQuestion", "", answer]);
+    apiCall(["post", "http://3.145.143.226:5000//updateQuestion", "", answer]);
     event.preventDefault();
   };
   useEffect(() => {
@@ -68,8 +68,12 @@ const Exam = () => {
   };
   // get inital question on page after loaded && set auto save answer in your writed question && your exam writed or not
   useEffect(() => {
-    apiCall(["get", "http://13.60.69.110:5000/getQuestion", setQuestions]);
-    apiCall(["get", "http://13.60.69.110:5000/submittedStatus", setSummitated]);
+    apiCall(["get", "http://3.145.143.226:5000//getQuestion", setQuestions]);
+    apiCall([
+      "get",
+      "http://3.145.143.226:5000//submittedStatus",
+      setSummitated,
+    ]);
   }, []); // eslint-disable-next-line
   return (
     <div className="w-100 d-flex justify-content-center align-items-center">
