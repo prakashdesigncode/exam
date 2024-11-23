@@ -6,18 +6,27 @@ const initailPage = { limit: 5, currentPage: 1 }; // declare variable pagination
 
 const useApiCall = () => {
   const apiCall = async (argument) => {
-    const [method, url, setState, payload] = argument;
+    const [method, url, setState, payload, callBack] = argument;
     const options = { method, url, ...(payload && { data: payload }) };
     await axios(options)
-      .then((res) => setState && setState(fromJS(res.data.data)))
+      .then((res) => {
+        setState && setState(fromJS(res.data.data));
+        callBack && callBack();
+      })
       .catch((error) => console.log(`something went wrong ${error}`));
   };
   return [apiCall];
 }; //call api request use this custom hook
 const useAutoSave = (answer, submmited) => {
   const [apiCall] = useApiCall();
-  const save = (event) => {
-    apiCall(["post", "http://18.232.156.74:5000/updateQuestion", "", answer]);
+  const save = (event, callBack) => {
+    apiCall([
+      "post",
+      "http://18.232.156.74:5000/updateQuestion",
+      "",
+      answer,
+      callBack,
+    ]);
     event.preventDefault();
   };
   useEffect(() => {
@@ -58,6 +67,13 @@ const Exam = () => {
   const endPage = currentPage * limit;
   const totalNumberOfPages = Math.ceil(questions.size / limit);
   const userInLastPage = totalNumberOfPages === currentPage;
+
+  const callBack = () => {
+    const isAnswered = questions.every((question) =>
+      question.has("userAnswer")
+    );
+    if (isAnswered) setSummitated(true);
+  };
 
   const handleChangeAnswer = (argument) => {
     const [questionId, optionIndex, questionIndex] = argument;
@@ -119,7 +135,7 @@ const Exam = () => {
             })}
           <br />
           {userInLastPage && (
-            <button className="mb-5" onClick={save}>
+            <button className="mb-5" onClick={(event) => save(event, callBack)}>
               submit your answer
             </button>
           )}
