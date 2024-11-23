@@ -96,7 +96,7 @@ const Exam = () => {
       {summitated && <div className="">your response is already submmited</div>}
       {!summitated && (
         <div>
-          <h3 className="mb-4">writing exams</h3>
+          <h3 className="mb-4">{`{ writing exams }`}</h3>
           {questions
             .slice(startPage, endPage)
             .map((question, questionIndex) => {
